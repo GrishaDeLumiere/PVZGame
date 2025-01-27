@@ -14,10 +14,8 @@ import game.WindowManager;
 import game.entity.Entity;
 import game.font.Color4f;
 import game.font.FontManager;
-import game.font.FontTT;
 import game.gui.ScaleToScreen;
 import game.level.wave.EntitySpawner;
-import game.shaders.ShaderManager;
 import game.texture.TextureManager;
 import java.awt.*;
 

@@ -13,7 +13,6 @@ import game.WindowManager;
 import game.entity.Entity;
 import game.entity.EntityZombie;
 import game.level.Level;
-import game.shaders.ShaderManager;
 
 public class WaveSystem {
 
