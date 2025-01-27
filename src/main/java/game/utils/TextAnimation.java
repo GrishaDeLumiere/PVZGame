@@ -19,8 +19,7 @@ public class TextAnimation {
     private long wordStartTime = System.currentTimeMillis();
     private long[] wordDelays;
 
-    public TextAnimation() {
-    }
+    public TextAnimation() {}
 
     public void send(String[] words, long[] delays, boolean useFadeOut, boolean isIncreasing) {
         wordsQueue.clear();
