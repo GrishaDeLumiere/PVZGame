@@ -44,7 +44,6 @@ public class TextAnimation {
         currentFontSize = isIncreasing ? standartFontSize : shrinkMaxFontSize; // Установка начального размера
         textAlpha = 1.0f; // Сброс прозрачности
         animationFinished = false;
-        System.currentTimeMillis();
         wordStartTime = System.currentTimeMillis();
     }
 
