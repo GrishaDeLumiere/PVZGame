@@ -265,10 +265,41 @@ public class LevelScreen extends AbstractScreen {
 						ScaleToScreen.getStretchedHeight(flagY), ScaleToScreen.getStretchedWidth(26),
 						ScaleToScreen.getStretchedHeight(56));
 			}
+
 		}
 
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
-
+		if (totalWaves < 15) {
+			FontManager.getFont("FBUSV8C5EI").drawTextAlignedLeftOf(
+				Localization.get(starter.getLevel().levelName),// Текст для отрисовки
+				25,                                     // Размер текста
+				ScaleToScreen.getStretchedWidth(1500),  // Координата правого края
+				ScaleToScreen.getStretchedHeight(38),   // Координата Y
+				0,                                      // Координата Z
+				new Color4f("#D4B870"),                 // Цвет текста
+				0.1f,                                   // Поворот по X
+				0.1f,                                   // Поворот по Y
+				0,                                      // Поворот по Z
+				false,                                  // Центрирование отключено
+				1.25f,                                  // Размер обводки
+				new Color4f("#000000")                  // Цвет обводки
+			);
+		} else {
+			FontManager.getFont("FBUSV8C5EI").drawTextAlignedLeftOf(
+				Localization.get(starter.getLevel().levelName),// Текст для отрисовки
+				25,                                     // Размер текста
+				ScaleToScreen.getStretchedWidth(1275),  // Координата правого края
+				ScaleToScreen.getStretchedHeight(38),   // Координата Y
+				0,                                      // Координата Z
+				new Color4f("#D4B870"),                 // Цвет текста
+				0.1f,                                   // Поворот по X
+				0.1f,                                   // Поворот по Y
+				0,                                      // Поворот по Z
+				false,                                  // Центрирование отключено
+				1.25f,                                  // Размер обводки
+				new Color4f("#000000")                  // Цвет обводки
+			);
+		}
 		List<Entity> entities = WaveSystem.getEntities();
 		long zombieCount = 0;
 
@@ -373,7 +404,7 @@ public class LevelScreen extends AbstractScreen {
 		if (glfwGetKey(WindowManager.getWindowHandle(), keySpeedUp) == GLFW_PRESS && !isKeyCPressed) {
 			// Переключаем между ускорением и нормальной скоростью
 			if (TimerUtils.getTimeScale() == 1.0f) {
-				TimerUtils.setTimeScale(5.0f); // Ускоряем время
+				TimerUtils.setTimeScale(2.0f); // Ускоряем время
 			} else {
 				TimerUtils.setTimeScale(1.0f); // Возвращаем нормальную скорость
 			}
