@@ -15,7 +15,6 @@ public class TextAnimation {
     private boolean isIncreasing = true; // Увеличивать или уменьшать текст
     private Queue<String> wordsQueue = new LinkedList<>();
     private boolean animationFinished = false;
-    private long lastUpdateTime = System.currentTimeMillis();
     private long wordStartTime = System.currentTimeMillis();
     private long[] wordDelays;
 
@@ -45,7 +44,7 @@ public class TextAnimation {
         currentFontSize = isIncreasing ? standartFontSize : shrinkMaxFontSize; // Установка начального размера
         textAlpha = 1.0f; // Сброс прозрачности
         animationFinished = false;
-        lastUpdateTime = System.currentTimeMillis();
+        System.currentTimeMillis();
         wordStartTime = System.currentTimeMillis();
     }
 
@@ -54,8 +53,6 @@ public class TextAnimation {
             return;
 
         long currentTime = System.currentTimeMillis();
-        lastUpdateTime = currentTime;
-
         if (currentWordIndex >= wordsQueue.size()) {
             animationFinished = true;
             return;
