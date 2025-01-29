@@ -150,14 +150,14 @@ public class CardsManager {
         plantManager.updateCooldowns(delta);
 
         if (mouseManager.isLeftMousePressed()) {
-            float cursorX = (float) mouseManager.getMouseX(); // Получаем позицию мыши по оси X
-            float cursorY = (float) mouseManager.getMouseY(); // Получаем позицию мыши по оси Y
+            float cursorX = (float) mouseManager.getMouseX(); 
+            float cursorY = (float) mouseManager.getMouseY();
             onFieldClick(cursorX, cursorY); // Садим растение на поле
         }
 
         // Если нажата правая кнопка, сбрасываем выбранное растение
-        if (mouseManager.isRightMousePressed()) {
-            selectedPlant = null; // Отмена выбора растения
+        if (mouseManager.isRightMousePressed() && selectedPlant != null) {
+            selectedPlant = null; 
             WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
             mouseManager.reset();
         }

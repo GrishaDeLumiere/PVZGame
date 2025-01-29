@@ -101,7 +101,7 @@ public class WaveSystem {
             float spawnInterval = calculateSpawnInterval();
 
             if (enemySpawnTimer >= spawnInterval) {
-                spawnEnemy();
+                ThreadPoolManager.getInstance().submitTask(() -> spawnEnemy());
                 enemySpawnTimer = 0f;
             }
 
@@ -175,7 +175,7 @@ public class WaveSystem {
                                                                            // волне
 
         for (int i = 0; i < spawnRate && enemiesSpawnedInWave < enemiesToSpawnThisWave; i++) {
-            spawnEnemy();
+            ThreadPoolManager.getInstance().submitTask(() -> spawnEnemy());
             enemiesSpawnedInWave++;
         }
 

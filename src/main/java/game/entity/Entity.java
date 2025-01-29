@@ -88,6 +88,10 @@ public abstract class Entity {
         }
     }
 
+    public String getCurrentTextureName() {
+        return animation != null ? animation.getCurrentFrame() : "default";
+    }
+
     public boolean isColliding(float otherX, float otherY, float otherWidth, float otherHeight) {
         return x < otherX + otherWidth &&
                 x + hitboxWidth > otherX &&
@@ -133,10 +137,6 @@ public abstract class Entity {
 
     public float getHitboxHeight() {
         return hitboxHeight;
-    }
-
-    public String getCurrentTextureName() {
-        return animation != null ? animation.getCurrentFrame() : "default";
     }
 
 }
