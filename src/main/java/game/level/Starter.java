@@ -36,7 +36,7 @@ public class Starter {
 
     public void init() {
         entities.clear();
-        WindowManager.getSoundEngine().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+        WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
         TextureManager.loadTexture("background1", "textures/Level/background1.png");
         camera = new Camera(1920, 1080);
         level = new Level("level.name.test", camera, "background1");

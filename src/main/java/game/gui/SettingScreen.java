@@ -10,7 +10,7 @@ import game.texture.TextureManager;
 public class SettingScreen extends AbstractScreen {
 	
 	public SettingScreen() {
-		WindowManager.getSoundEngine().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
 		
 		TextureManager.loadTexture("setting_bg", "textures/setting/setting_bg.png");
 		
@@ -65,17 +65,17 @@ public class SettingScreen extends AbstractScreen {
 	public void onButtonClick(int id) {
 	       switch (id) {
            case 0:
-        	   WindowManager.getSoundEngine().playSoundEffect("buttonclick");
+        	   WindowManager.getAL().getSoundEffectManager().playSoundEffect("buttonclick");
                	WindowManager.SwitchToScreen(new MainMenuScreen());
                break;
                
            case 1:
-        	   WindowManager.getSoundEngine().playSoundEffect("ceramic");
+        	   WindowManager.getAL().getSoundEffectManager().playSoundEffect("ceramic");
               	WindowManager.toggleFullscreen();
               break;
               
            case 2: // Логика переключения автоподбора
-        	   WindowManager.getSoundEngine().playSoundEffect("ceramic");
+        	   WindowManager.getAL().getSoundEffectManager().playSoundEffect("ceramic");
                boolean hasExecuted = false;
                boolean currentAutoSunSelection = SettingsManager.isAutoSunSelectionEnabled();
                System.out.println("Текущее состояние AutoSunSelection: " + currentAutoSunSelection);

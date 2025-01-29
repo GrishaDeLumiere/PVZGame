@@ -124,7 +124,7 @@ public class WaveSystem {
                     new long[] { 5000 }, true, false);
 
             if (!hasPlayedWaveSound) {
-                WindowManager.getSoundEngine().playSoundEffect("hugewave");
+                WindowManager.getAL().getSoundEffectManager().playSoundEffect("hugewave");
                 hasPlayedWaveSound = true;
             }
         }
@@ -156,7 +156,7 @@ public class WaveSystem {
             level.getTextAnimation().send(
                     new String[] { Localization.get("level.text.zombiewavefinal") },
                     new long[] { 2500 }, true, false);
-            WindowManager.getSoundEngine().playSoundEffect("finalwave");
+            WindowManager.getAL().getSoundEffectManager().playSoundEffect("finalwave");
 
             isFinalWave = true;
         }
@@ -165,7 +165,7 @@ public class WaveSystem {
     // Спавн врагов для волны
     private void spawnWaveEnemies(float deltaTime) {
         if (!hasPlayedWaveSound) {
-            WindowManager.getSoundEngine().playSoundEffect("siren");
+            WindowManager.getAL().getSoundEffectManager().playSoundEffect("siren");
             hasPlayedWaveSound = true;
         }
 
@@ -252,7 +252,7 @@ public class WaveSystem {
             laneZombieCounts[chosenLane]++;
 
             if (!hasPlayedSound) {
-                WindowManager.getSoundEngine().playSoundEffect("awooga");
+                WindowManager.getAL().getSoundEffectManager().playSoundEffect("awooga");
                 hasPlayedSound = true;
             }
             if (entity instanceof EntityZombie) {

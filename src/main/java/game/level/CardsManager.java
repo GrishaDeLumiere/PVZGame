@@ -158,7 +158,7 @@ public class CardsManager {
         // Если нажата правая кнопка, сбрасываем выбранное растение
         if (mouseManager.isRightMousePressed()) {
             selectedPlant = null; // Отмена выбора растения
-            WindowManager.getSoundEngine().playSoundEffect("tap2");
+            WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
             mouseManager.reset();
         }
     }
@@ -177,10 +177,10 @@ public class CardsManager {
                     plantManager.resetCooldown(selectedPlant); // Сбрасываем кулдаун
                     starter.getLevel().removeSun(plantPrice); // Уменьшаем солнце
                     selectedPlant = null; // Сбрасываем выбранное растение
-                    WindowManager.getSoundEngine().playSoundEffect("plant");
+                    WindowManager.getAL().getSoundEffectManager().playSoundEffect("plant");
                 }
             } else if (!plantManager.isCooldownReady(selectedPlant)) {
-                WindowManager.getSoundEngine().playSoundEffect("buzzer"); // Игровой звук ошибки, если кулдаун не
+                WindowManager.getAL().getSoundEffectManager().playSoundEffect("buzzer"); // Игровой звук ошибки, если кулдаун не
                                                                           // завершен
             }
         }
@@ -237,7 +237,7 @@ public class CardsManager {
                         }
 
                         if (!plantManager.isCooldownReady(plant)) {
-                            WindowManager.getSoundEngine().playSoundEffect("buzzer"); // Звук кулдауна
+                            WindowManager.getAL().getSoundEffectManager().playSoundEffect("buzzer"); // Звук кулдауна
                             return; // Выход, чтобы не выделить растение
                         }
 
@@ -245,11 +245,11 @@ public class CardsManager {
                         if (selectedPlant == plant) {
                             selectedPlant = null; // Снимаем выбор, если растение уже выбрано
                         } else {
-                            WindowManager.getSoundEngine().playSoundEffect("seedlift"); // Звук выбора растения
+                            WindowManager.getAL().getSoundEffectManager().playSoundEffect("seedlift"); // Звук выбора растения
                             selectedPlant = plant; // Выбираем новое растение
                         }
                     } else {
-                        WindowManager.getSoundEngine().playSoundEffect("buzzer");
+                        WindowManager.getAL().getSoundEffectManager().playSoundEffect("buzzer");
                     }
                 }
             }
@@ -265,7 +265,7 @@ public class CardsManager {
                     Plant selectedPlant = availablePlants.get(plantIndex);
 
                     if (selectedPlant != null && !selectedPlant.isSelected()) {
-                        WindowManager.getSoundEngine().playSoundEffect("tap");
+                        WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap");
 
                         float startX = ScaleToScreen.getCenterX(350) + (plantIndex % 9) * ScaleToScreen.get(90);
                         float startY = ScaleToScreen.getBot(745) - (plantIndex / 9) * ScaleToScreen.get(120);
@@ -280,7 +280,7 @@ public class CardsManager {
                     }
                 }
             } else if (id >= PLANT_BUTTON_ID_OFFSET + 100) {
-                WindowManager.getSoundEngine().playSoundEffect("tap2");
+                WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
 
                 int plantIndex = id - (PLANT_BUTTON_ID_OFFSET + 100);
                 List<Plant> selectedPlants = plantManager.getSelectedPlants();

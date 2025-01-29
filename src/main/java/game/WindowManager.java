@@ -52,7 +52,7 @@ import game.gui.ScaleToScreen;
 import game.gui.Screen;
 import game.keys.MouseManager;
 import game.shaders.ShaderManager;
-import game.sound.OpenALSoundEngine;
+import game.sound.OpenALManager;
 import game.texture.TextureLoader;
 import game.texture.TextureManager;
 import game.utils.DebugUtils;
@@ -128,7 +128,7 @@ public class WindowManager {
 	    });
 	}
 	
-	private static OpenALSoundEngine soundEngine;
+	private static OpenALManager soundEngine;
     
 	private static void SetupGame() {
         // Загрузка иконки
@@ -144,7 +144,7 @@ public class WindowManager {
             logger.warn("Failed to load window icon, continuing without it");
         }
 
-	    soundEngine = new OpenALSoundEngine();
+	    soundEngine = new OpenALManager();
 	    new Thread(() -> soundEngine.loadSoundEngine()).start();
 
 	    TimerUtils.init();
@@ -164,7 +164,7 @@ public class WindowManager {
 	        MainThreadManager.processMainThreadQueue();
 	        float delta = TimerUtils.getDelta();
 	        TimerUtils.update();
-	        soundEngine.updateSourceUsage();
+	        soundEngine.getSoundEffectManager().updateSourceUsage();
             
 
 	        getMouseManager().processClick();
@@ -382,7 +382,7 @@ public class WindowManager {
         }
     }
 
-	public static OpenALSoundEngine getSoundEngine() {
+	public static OpenALManager getAL() {
 		return soundEngine;
 	}
     

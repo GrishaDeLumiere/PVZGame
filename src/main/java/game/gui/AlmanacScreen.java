@@ -14,7 +14,7 @@ public class AlmanacScreen extends AbstractScreen {
 	private EntityZombie zombie;
 	
 	public AlmanacScreen() {
-		WindowManager.getSoundEngine().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
 		
 		TextureManager.loadTexture("Almanac_IndexBack", "textures/Almanac/Almanac_IndexBack.png");
 		
@@ -74,15 +74,15 @@ public class AlmanacScreen extends AbstractScreen {
 	public void onButtonClick(int id) {
 	       switch (id) {
            case 0:
-        	   WindowManager.getSoundEngine().playSoundEffect("tap2");
+        	   WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
               	WindowManager.CloseOverlayScreen();
                break;
            case 1:
-        	   WindowManager.getSoundEngine().playSoundEffect("tap2");
+        	   WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
              	 WindowManager.OpenOverlayScreen(new AlmanacScreenPlants());
               break;
            case 2:
-        	   WindowManager.getSoundEngine().playSoundEffect("gravebutton");
+        	   WindowManager.getAL().getSoundEffectManager().playSoundEffect("gravebutton");
              	 WindowManager.OpenOverlayScreen(new AlmanacScreenZombie());
               break;
            default:

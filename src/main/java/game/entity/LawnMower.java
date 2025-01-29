@@ -91,7 +91,7 @@ public class LawnMower {
     public void checkCollisionWithEntity(Entity entity) {
         // Если газонокосилка не активна и есть столкновение, активируем её
         if (!isActive && isCollidingWithEntity(entity)) {
-        	WindowManager.getSoundEngine().playSoundEffect("lawnmower");
+        	WindowManager.getAL().getSoundEffectManager().playSoundEffect("lawnmower");
             activate();
         }
         

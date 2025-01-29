@@ -19,8 +19,8 @@ public class MainMenuScreen extends AbstractScreen {
 	
 	public MainMenuScreen() {
 	if(AnimsFinished == false) {
-		WindowManager.getSoundEngine().loadAndPlayBackgroundMusic("music/MainMenu.wav");
-		WindowManager.getSoundEngine().playSoundEffect("roll_in");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/MainMenu.wav");
+		WindowManager.getAL().getSoundEffectManager().playSoundEffect("roll_in");
 	}
 	
         // Загружаем текстуры через TextureManager
@@ -178,7 +178,7 @@ public class MainMenuScreen extends AbstractScreen {
 	public void onButtonClick(int id) {
         switch (id) {
             case 0:
-            	WindowManager.getSoundEngine().playSoundEffect("tap");
+            	WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap");
             	WindowManager.SwitchToScreen(new LevelScreen());
                 break;
             case 1:
@@ -189,16 +189,16 @@ public class MainMenuScreen extends AbstractScreen {
                 break;
                 
             case 7:
-            	WindowManager.getSoundEngine().playSoundEffect("bleep");
+            	WindowManager.getAL().getSoundEffectManager().playSoundEffect("bleep");
             	WindowManager.SwitchToScreen(new AlmanacScreen());
                 break;
                 
             case 9:
-            	WindowManager.getSoundEngine().playSoundEffect("tap2");
+            	WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
             	WindowManager.SwitchToScreen(new SettingScreen());
                 break;
             case 10:
-            	WindowManager.getSoundEngine().playSoundEffect("tap2");
+            	WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
             	WindowManager.exitGame();
                 break;
             default:

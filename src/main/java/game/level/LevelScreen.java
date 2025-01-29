@@ -434,16 +434,16 @@ public class LevelScreen extends AbstractScreen {
 
 		switch (id) {
 			case 0: // Меню
-				WindowManager.getSoundEngine().playSoundEffect("gravebutton");
+				WindowManager.getAL().getSoundEffectManager().playSoundEffect("gravebutton");
 				WindowManager.SwitchToScreen(new MainMenuScreen());
 				break;
 			case 1: // Альманах
-				WindowManager.getSoundEngine().playSoundEffect("tap2");
+				WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
 				WindowManager.OpenOverlayScreen(new AlmanacScreen());
 				break;
 
 			case 2: // Старт игры
-				WindowManager.getSoundEngine().playSoundEffect("tap2");
+				WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
 				starter.endPlantSelection();
 				break;
 			default:

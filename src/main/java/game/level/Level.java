@@ -216,8 +216,8 @@ public class Level {
     }
 
     public void Starting() {
-        WindowManager.getSoundEngine().playSoundEffect("readysetplant");
-        WindowManager.getSoundEngine().loadAndPlayBackgroundMusic("music/Day.wav");
+        WindowManager.getAL().getSoundEffectManager().playSoundEffect("readysetplant");
+        WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/Day.wav");
 
         String[] words = {
                 Localization.get("level.text.start1"),
@@ -269,7 +269,7 @@ public class Level {
         }
 
         if (clickedSun) {
-            WindowManager.getSoundEngine().playSoundEffect("points");
+            WindowManager.getAL().getSoundEffectManager().playSoundEffect("points");
         }
     }
 

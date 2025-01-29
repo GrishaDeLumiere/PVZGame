@@ -11,7 +11,7 @@ import game.texture.TextureManager;
 public class AlmanacScreenPlants extends AbstractScreen  {
 	
 	public AlmanacScreenPlants() {
-		WindowManager.getSoundEngine().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
 		
 		TextureManager.loadTexture("Almanac_PlantBack", "textures/Almanac/plant.png");
 	}
@@ -39,7 +39,7 @@ public class AlmanacScreenPlants extends AbstractScreen  {
 	public void onButtonClick(int id) {
 	       switch (id) {
            case 0:
-        	   WindowManager.getSoundEngine().playSoundEffect("tap2");
+        	   WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
               	WindowManager.CloseOverlayScreen();
                break;
            default:

@@ -20,7 +20,7 @@ public class AlmanacScreenZombie extends AbstractScreen {
 	private Entity selectedEntity = null; // Выбранный моб
 	
 	public AlmanacScreenZombie() {
-		WindowManager.getSoundEngine().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
 		
 		TextureManager.loadTexture("Almanac_ZombieBack", "textures/Almanac/Almanac_ZombieBack.png");
 		TextureManager.loadTexture("Almanac_ZombieCard", "textures/Almanac/Almanac_ZombieCard.png");
@@ -191,13 +191,13 @@ public class AlmanacScreenZombie extends AbstractScreen {
 	public void onButtonClick(int id) {
 	       switch (id) {
            case 0:
-        	   WindowManager.getSoundEngine().playSoundEffect("tap2");
+        	   WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2");
               	WindowManager.CloseOverlayScreen();
                break;
            default: // Выбор моба
                if (id > 0 && id <= entities.size()) {
                    selectedEntity = entities.get(id - 1); // Выбираем моба из списка
-                   WindowManager.getSoundEngine().playSoundEffect("tap2"); // Звук выбора
+                   WindowManager.getAL().getSoundEffectManager().playSoundEffect("tap2"); // Звук выбора
                }
                break;
        }

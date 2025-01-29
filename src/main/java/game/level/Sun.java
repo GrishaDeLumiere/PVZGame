@@ -129,7 +129,7 @@ public class Sun {
     public void setClicked(boolean clicked) {
         this.clicked = clicked;
         if (clicked) {
-        	WindowManager.getSoundEngine().playSoundEffect("points"); 
+        	WindowManager.getAL().getSoundEffectManager().playSoundEffect("points"); 
             isMovingToCorner = true;
         }
     }

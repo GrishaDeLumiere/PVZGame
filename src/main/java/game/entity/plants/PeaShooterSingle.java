@@ -35,7 +35,7 @@ public class PeaShooterSingle extends Plant {
 	public void shoot() {
 	    Entity target = findEnemyInRange(2000);
 	    if (target != null) {
-	    	WindowManager.getSoundEngine().playSoundEffect("throw2"); 
+	    	WindowManager.getAL().getSoundEffectManager().playSoundEffect("throw2"); 
 			Level.addProjectile(new Projectile(this.x + 60, this.y + 77, damage, 500, 10, 10));
 	     }
 	}

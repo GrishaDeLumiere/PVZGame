@@ -41,7 +41,7 @@ public class Projectile {
                 if (isColliding(entity.getX(), entity.getY(), entity.getHitboxWidth(), entity.getHitboxHeight())) {
                     handleCollision(entity);
                     if (entity instanceof EntityZombie) {
-                        WindowManager.getSoundEngine()
+                        WindowManager.getAL().getSoundEffectManager()
                                 .playRandomSoundEffect(Arrays.asList("splat", "splat2", "splat3"));
                     }
 
