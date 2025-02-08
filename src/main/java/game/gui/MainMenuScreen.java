@@ -19,7 +19,7 @@ public class MainMenuScreen extends AbstractScreen {
 	
 	public MainMenuScreen() {
 	if(AnimsFinished == false) {
-		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/MainMenu.wav");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/MainMenu.ogg");
 		WindowManager.getAL().getSoundEffectManager().playSoundEffect("roll_in");
 	}
 	

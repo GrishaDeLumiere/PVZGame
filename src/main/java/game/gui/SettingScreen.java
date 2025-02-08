@@ -10,7 +10,7 @@ import game.texture.TextureManager;
 public class SettingScreen extends AbstractScreen {
 	
 	public SettingScreen() {
-		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.ogg");
 		
 		TextureManager.loadTexture("setting_bg", "textures/setting/setting_bg.png");
 		

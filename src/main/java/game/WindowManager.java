@@ -1,28 +1,6 @@
 package game;
 
-import static org.lwjgl.glfw.GLFW.GLFW_DONT_CARE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_F11;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_F12;
-import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
-import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
-import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
-import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
-import static org.lwjgl.glfw.GLFW.glfwGetFramebufferSize;
-import static org.lwjgl.glfw.GLFW.glfwGetKey;
-import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
-import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
-import static org.lwjgl.glfw.GLFW.glfwInit;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwSetFramebufferSizeCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowIcon;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowMonitor;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
-import static org.lwjgl.glfw.GLFW.glfwShowWindow;
-import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
-import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
-import static org.lwjgl.glfw.GLFW.glfwTerminate;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -73,11 +51,38 @@ public class WindowManager {
     private static MouseManager mouseManager;;
 
     public static void setupWindow() {
-        initializeWindow();
-        setupOpenGL();
-        ScaleToScreen.update();
-        mouseManager = new MouseManager(windowHandle);
-        SetupGame();
+        try {
+            initializeWindow();
+            setupOpenGL();
+            ScaleToScreen.update();
+            mouseManager = new MouseManager(windowHandle);
+            SetupGame();
+        } finally {
+            shutdownGame();
+        }
+    }
+
+    /**
+     * Завершаем процесс гры
+     */
+    public static void shutdownGame() {
+        try {
+            System.out.println("Stopping game...");
+
+            glfwSetWindowShouldClose(windowHandle, true); // Сообщаем GLFW закрыть окно
+            glfwDestroyWindow(windowHandle); // Удаляем окно GLFW
+            glfwTerminate(); // Закрываем GLFW
+
+            // Очистка памяти
+            System.gc();
+
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            // Завершаем игру и выходим
+            System.out.println("Game stopped.");
+            System.exit(0); // Завершаем приложение с кодом 0
+        }
     }
 
     private static void initializeWindow() {
@@ -232,7 +237,19 @@ public class WindowManager {
         FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(TimerUtils.getFpsString(), (int) ScaleToScreen.get(32),
                 ScaleToScreen.get(55), ScaleToScreen.getTop(40), 0, new Color4f("#FFFFFF"), 0.1f, 0.1f, 0, true, 0.1f,
                 0.1f, new Color4f("#000000"));
+
+        if (DebugManager.isDebugMode()) {
+            FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(
+                    "Режим Разработчика",
+                    (int) ScaleToScreen.get(32),
+                    ScaleToScreen.get(800),
+                    ScaleToScreen.getTop(40),
+                    0,
+                    new Color4f("#FF3200"),
+                    0.1f, 0.1f, 0, true, 0.1f, 0.1f, new Color4f("#000000"));
+        }
         GL11.glPopMatrix();
+
     }
 
     public static MouseManager getMouseManager() {
@@ -240,18 +257,40 @@ public class WindowManager {
     }
 
     private static boolean isKeyPressed = false;
+
     private static boolean isDebugKeyPressed = false;
+    private static boolean isCollisionKeyPressed = false;
 
     private static void processKeyInput() {
-        // Обработка переключения DebugMode (F12)
+        // Обработка переключения режима DebugMode (F12)
         if (glfwGetKey(windowHandle, GLFW_KEY_F12) == GLFW_PRESS && !isDebugKeyPressed) {
-            DebugManager.setDebugMode(!DebugManager.isDebugMode()); // Переключаем режим
+            // Проверяем, не нажата ли Shift, чтобы это была просто F12
+            if (glfwGetKey(windowHandle, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE
+                    && glfwGetKey(windowHandle, GLFW_KEY_RIGHT_SHIFT) == GLFW_RELEASE) {
+                // Переключаем режим DebugMode
+                DebugManager.setDebugMode(!DebugManager.isDebugMode());
+                System.out.println("Debug mode: " + DebugManager.isDebugMode());
+            }
             isDebugKeyPressed = true;
-            System.out.println("Debug mode: " + DebugManager.isDebugMode());
         }
 
+        // Обработка переключения коллизии (Shift + F12)
+        if (glfwGetKey(windowHandle, GLFW_KEY_F12) == GLFW_PRESS &&
+                (glfwGetKey(windowHandle, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS
+                        || glfwGetKey(windowHandle, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
+                &&
+                !isCollisionKeyPressed) {
+
+            // Переключаем режим коллизии
+            DebugManager.toggleCollisionMode(); // Вставь свой метод для переключения коллизии
+            System.out.println("Collision mode toggled.");
+            isCollisionKeyPressed = true;
+        }
+
+        // Проверка, отпустили ли F12 (для сброса флага)
         if (glfwGetKey(windowHandle, GLFW_KEY_F12) == GLFW_RELEASE) {
-            isDebugKeyPressed = false; // Сбрасываем состояние клавиши
+            isDebugKeyPressed = false;
+            isCollisionKeyPressed = false;
         }
 
         // Обработка других клавиш (пример: F11 для полноэкранного режима)

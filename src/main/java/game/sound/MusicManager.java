@@ -8,6 +8,8 @@ import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
+import game.ThreadPoolManager;
+
 import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -18,15 +20,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Класс MusicManager управляет воспроизведением фоновой музыки в игре с использованием OpenAL.
- * Он позволяет загружать, воспроизводить и останавливать фоновую музыку, а также настраивать уровень громкости музыки.
+ * Класс MusicManager управляет воспроизведением фоновой музыки в игре с
+ * использованием OpenAL.
+ * Он позволяет загружать, воспроизводить и останавливать фоновую музыку, а
+ * также настраивать уровень громкости музыки.
  * <p>
  * Основные возможности:
  * <ul>
- *     <li>Загрузка и воспроизведение фоновой музыки с заданного пути, поддерживая форматы WAV.</li>
- *     <li>Установка громкости фоновой музыки (через поле {@link #backgroundMusicVolume}).</li>
- *     <li>Остановка текущей фоновой музыки и освобождение используемых ресурсов.</li>
- *     <li>Предотвращение повторного воспроизведения той же самой музыки.</li>
+ * <li>Загрузка и воспроизведение фоновой музыки с заданного пути, поддерживая
+ * форматы WAV.</li>
+ * <li>Установка громкости фоновой музыки (через поле
+ * {@link #backgroundMusicVolume}).</li>
+ * <li>Остановка текущей фоновой музыки и освобождение используемых
+ * ресурсов.</li>
+ * <li>Предотвращение повторного воспроизведения той же самой музыки.</li>
  * </ul>
  * <p>
  * Важные методы:
@@ -61,142 +68,61 @@ public class MusicManager {
 
         stopBackgroundMusic();
 
-        try {
-            File musicFile = new File("assets/" + filePath);
-            if (!musicFile.exists()) {
-                LOGGER.warning("Music file not found: " + musicFile.getPath());
-                return;
-            }
-
-            // Определяем тип файла
-            String fileExtension = getFileExtension(musicFile);
-            ByteBuffer bufferData = null;
-            int format = -1;
-            int sampleRate = 0;
-
-            if (fileExtension.equalsIgnoreCase("ogg")) {
-                // Обрабатываем OGG файл с использованием stb_vorbis
-                byte[] oggBytes = Files.readAllBytes(musicFile.toPath());
-                ByteBuffer oggBuffer = MemoryUtil.memAlloc(oggBytes.length);
-                oggBuffer.put(oggBytes);
-                oggBuffer.flip();
-
-                // Создаем буферы для каналов и частоты дискретизации
-                try (MemoryStack stack = MemoryStack.stackPush()) {
-                    IntBuffer channels = stack.mallocInt(1); // Число каналов
-                    IntBuffer sampleRateBuffer = stack.mallocInt(1); // Частота дискретизации
-                    PointerBuffer output = stack.mallocPointer(1); // Указатель на декодированные данные
-
-                    // Декодируем OGG
-                    int result = STBVorbis.stb_vorbis_decode_memory(oggBuffer, channels, sampleRateBuffer, output);
-                    if (result == 0) {
-                        LOGGER.warning("Failed to decode OGG file: " + filePath);
-                        return;
-                    }
-
-                    // Получаем декодированные PCM данные
-                    long pcmPointer = output.get(0); // Указатель на PCM данные
-                    int dataLength = result * channels.get(0); // Длина данных с учетом каналов
-
-                    // Создаем ShortBuffer для PCM данных
-                    ShortBuffer pcmData = MemoryUtil.memShortBuffer(pcmPointer, dataLength);
-
-                    // Устанавливаем формат для OpenAL
-                    format = getOpenALFormat(channels.get(0), 16); // 16 бит на сэмпл
-                    sampleRate = sampleRateBuffer.get(0);
-
-                    // Записываем данные в bufferData
-                    bufferData = MemoryUtil.memAlloc(pcmData.remaining() * 2); // каждый сэмпл по 2 байта (16 бит)
-                    while (pcmData.hasRemaining()) {
-                        short sample = pcmData.get();
-                        bufferData.put((byte) (sample & 0xFF)); // младший байт
-                        bufferData.put((byte) ((sample >> 8) & 0xFF)); // старший байт
-                    }
-                    bufferData.flip();
+        ThreadPoolManager.getInstance().submitTask(() -> {
+            try {
+                File musicFile = new File("assets/" + filePath);
+                if (!musicFile.exists()) {
+                    LOGGER.warning("Music file not found: " + musicFile.getPath());
+                    return;
                 }
-            } else if (fileExtension.equalsIgnoreCase("wav")) {
-                // Обрабатываем WAV файл
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(musicFile);
-                AudioFormat formatAudio = audioStream.getFormat();
-                byte[] audioData = IOUtils.toByteArray(audioStream);
-                bufferData = BufferUtils.createByteBuffer(audioData.length).put(audioData);
-                bufferData.flip();
-                format = getOpenALFormat(formatAudio);
-                sampleRate = (int) formatAudio.getSampleRate();
+
+                // Определяем тип файла и обрабатываем его
+                String fileExtension = OpenALUtils.getFileExtension(musicFile);
+                ByteBuffer bufferData = null;
+                int format = -1;
+                int sampleRate = 0;
+
+                if (fileExtension.equalsIgnoreCase("ogg")) {
+                    int[] formatOut = new int[1];
+                    int[] sampleRateOut = new int[1];
+                    bufferData = OpenALUtils.handleOggFile(musicFile, formatOut, sampleRateOut);
+                    format = formatOut[0];
+                    sampleRate = sampleRateOut[0];
+                } else if (fileExtension.equalsIgnoreCase("wav")) {
+                    int[] formatArr = new int[1];
+                    int[] sampleRateArr = new int[1];
+                    bufferData = OpenALUtils.handleWavFile(musicFile, formatArr, sampleRateArr);
+                    format = formatArr[0];
+                    sampleRate = sampleRateArr[0];
+                }
+
+                if (format == -1) {
+                    LOGGER.warning("Unsupported audio format for file: " + filePath);
+                    return;
+                }
+
+                // Создаем OpenAL буфер и источники
+                createAndPlayMusic(bufferData, format, sampleRate, filePath);
+
+            } catch (IOException | UnsupportedAudioFileException e) {
+                LOGGER.log(Level.SEVERE, "Error loading music file: " + filePath, e);
             }
-
-            if (format == -1) {
-                LOGGER.warning("Unsupported audio format for file: " + filePath);
-                return;
-            }
-
-            // Создаем OpenAL буфер
-            int buffer = AL10.alGenBuffers();
-            AL10.alBufferData(buffer, format, bufferData, sampleRate);
-
-            currentMusicSource = AL10.alGenSources();
-            AL10.alSourcei(currentMusicSource, AL10.AL_BUFFER, buffer);
-            AL10.alSourcef(currentMusicSource, AL10.AL_GAIN, backgroundMusicVolume);
-            AL10.alSourcei(currentMusicSource, AL10.AL_LOOPING, AL10.AL_TRUE);
-
-            AL10.alSourcePlay(currentMusicSource);
-            currentMusic = filePath;
-
-            LOGGER.info("Playing background music: " + filePath);
-
-        } catch (UnsupportedAudioFileException e) {
-            LOGGER.log(Level.SEVERE, "Unsupported audio format: " + filePath, e);
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error reading music file: " + filePath, e);
-        }
+        });
     }
 
-    private int getOpenALFormat(int channels, int sampleSizeInBits) {
-        if (channels == 1) {
-            if (sampleSizeInBits == 8) {
-                return AL10.AL_FORMAT_MONO8;
-            } else if (sampleSizeInBits == 16) {
-                return AL10.AL_FORMAT_MONO16;
-            }
-        } else if (channels == 2) {
-            if (sampleSizeInBits == 8) {
-                return AL10.AL_FORMAT_STEREO8;
-            } else if (sampleSizeInBits == 16) {
-                return AL10.AL_FORMAT_STEREO16;
-            }
-        }
-    
-        return -1;  // Неподдерживаемый формат
-    }
+    private void createAndPlayMusic(ByteBuffer bufferData, int format, int sampleRate, String filePath) {
+        int buffer = AL10.alGenBuffers();
+        AL10.alBufferData(buffer, format, bufferData, sampleRate);
 
-    private String getFileExtension(File file) {
-        String fileName = file.getName();
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex == -1) {
-            return ""; // Если точка не найдена, возвращаем пустую строку.
-        }
-        return fileName.substring(dotIndex + 1).toLowerCase();
-    }
+        currentMusicSource = AL10.alGenSources();
+        AL10.alSourcei(currentMusicSource, AL10.AL_BUFFER, buffer);
+        AL10.alSourcef(currentMusicSource, AL10.AL_GAIN, backgroundMusicVolume);
+        AL10.alSourcei(currentMusicSource, AL10.AL_LOOPING, AL10.AL_TRUE);
 
-    private int getOpenALFormat(AudioFormat format) {
-        int channels = format.getChannels();
-        int sampleSizeInBits = format.getSampleSizeInBits();
+        AL10.alSourcePlay(currentMusicSource);
+        currentMusic = filePath;
 
-        if (channels == 1) {
-            if (sampleSizeInBits == 8) {
-                return AL10.AL_FORMAT_MONO8;
-            } else if (sampleSizeInBits == 16) {
-                return AL10.AL_FORMAT_MONO16;
-            }
-        } else if (channels == 2) {
-            if (sampleSizeInBits == 8) {
-                return AL10.AL_FORMAT_STEREO8;
-            } else if (sampleSizeInBits == 16) {
-                return AL10.AL_FORMAT_STEREO16;
-            }
-        }
-
-        return -1;
+        LOGGER.info("Playing background music: " + filePath);
     }
 
     public void stopBackgroundMusic() {

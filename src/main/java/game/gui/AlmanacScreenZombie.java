@@ -20,7 +20,7 @@ public class AlmanacScreenZombie extends AbstractScreen {
 	private Entity selectedEntity = null; // Выбранный моб
 	
 	public AlmanacScreenZombie() {
-		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.ogg");
 		
 		TextureManager.loadTexture("Almanac_ZombieBack", "textures/Almanac/Almanac_ZombieBack.png");
 		TextureManager.loadTexture("Almanac_ZombieCard", "textures/Almanac/Almanac_ZombieCard.png");

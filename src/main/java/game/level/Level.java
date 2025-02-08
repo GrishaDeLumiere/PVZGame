@@ -1,6 +1,7 @@
 package game.level;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -43,12 +44,14 @@ public class Level {
     private float cellHeight = 180; // Высота клетки
 
     public String levelName;
-    public WaveSystem waveSystem = new WaveSystem(this, 25, new ZombieLaneManager(5, 183f, 2000f, 70f));
+    public String levelmusic;
+    public WaveSystem waveSystem = new WaveSystem(this, 2, new ZombieLaneManager(5, 183f, 2000f, 70f));
 
     private TextAnimation textAnimation;
 
-    public Level(String levelname, Camera camera, String backgroundTexture) {
+    public Level(String levelname, String levelmusic, Camera camera, String backgroundTexture) {
         this.levelName = levelname;
+        this.levelmusic = levelmusic;
         textAnimation = new TextAnimation();
         projectiles.clear();
         waveSystem.addEnemyType(EntityZombie.class, 0.95f);
@@ -217,7 +220,9 @@ public class Level {
 
     public void Starting() {
         WindowManager.getAL().getSoundEffectManager().playSoundEffect("readysetplant");
-        WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/Day.wav");
+        //List<String> tracks = Arrays.asList("music/Roof2.ogg", "music/Roof1.ogg", "music/Roof2.ogg");
+       // WindowManager.getAL().getMusicManager().loadAndPlayPlaylist(tracks);
+        WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic(levelmusic);
 
         String[] words = {
                 Localization.get("level.text.start1"),

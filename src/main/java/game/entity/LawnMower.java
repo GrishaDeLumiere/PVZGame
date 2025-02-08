@@ -113,6 +113,7 @@ public class LawnMower {
         TextureManager.drawTexture(animation.getCurrentFrame(), ScaleToScreen.getStretchedWidth(x + 28), ScaleToScreen.getStretchedHeight(y + 47), ScaleToScreen.getStretchedWidth(width), ScaleToScreen.getStretchedHeight(height));
         if (DebugManager.isDebugMode()) {
             // Добавляем хитбокс в список для отрисовки
+            if (DebugManager.isCollisionDebugMode())
             DebugUtils.addHitbox(x, y, hitboxWidth, hitboxHeight, hitboxOffsetX, hitboxOffsetY, new Color4f(0.0f, 0.0f, 1.0f, 1.0f));
         }
     }

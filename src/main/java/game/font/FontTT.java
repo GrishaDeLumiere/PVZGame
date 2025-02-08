@@ -210,6 +210,8 @@ public class FontTT {
 			loadCharacter(charactersp, charlistp, 1025, false); // Ё
 			loadCharacter(charactersp, charlistp, 1105, false); // ё
 
+			loadCharacter(charactersp, charlistp, 32, false);
+
 		} catch (IOException e) {
 			System.out.println("FAILED to load plain set!!!");
 			e.printStackTrace();
@@ -236,6 +238,8 @@ public class FontTT {
 			// Добавляем символы Ё (U+0401) и ё (U+0451)
 			loadCharacter(characterso, charlisto, 1025, true); // Ё
 			loadCharacter(characterso, charlisto, 1105, true); // ё
+
+			loadCharacter(characterso, charlisto, 32, true);
 
 		} catch (IOException e) {
 			System.out.println("FAILED to load outline set!!!");
@@ -509,7 +513,8 @@ public class FontTT {
 		float adjustedX = rightEdgeX - realwidth;
 
 		// Вызываем метод отрисовки текста с обводкой
-		drawTextWithOutline(whatchars, size, adjustedX, y, z, textColor, rotxpass, rotypass, rotzpass, centered, outlineWidth, outlineColor);
+		drawTextWithOutline(whatchars, size, adjustedX, y, z, textColor, rotxpass, rotypass, rotzpass, centered,
+				outlineWidth, outlineColor);
 	}
 
 	/*

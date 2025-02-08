@@ -2,6 +2,8 @@ package game.level;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -271,33 +273,33 @@ public class LevelScreen extends AbstractScreen {
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		if (totalWaves < 15) {
 			FontManager.getFont("FBUSV8C5EI").drawTextAlignedLeftOf(
-				Localization.get(starter.getLevel().levelName),// Текст для отрисовки
-				25,                                     // Размер текста
-				ScaleToScreen.getStretchedWidth(1500),  // Координата правого края
-				ScaleToScreen.getStretchedHeight(38),   // Координата Y
-				0,                                      // Координата Z
-				new Color4f("#D4B870"),                 // Цвет текста
-				0.1f,                                   // Поворот по X
-				0.1f,                                   // Поворот по Y
-				0,                                      // Поворот по Z
-				false,                                  // Центрирование отключено
-				1.25f,                                  // Размер обводки
-				new Color4f("#000000")                  // Цвет обводки
+					Localization.get(starter.getLevel().levelName), // Текст для отрисовки
+					25, // Размер текста
+					ScaleToScreen.getStretchedWidth(1500), // Координата правого края
+					ScaleToScreen.getStretchedHeight(38), // Координата Y
+					0, // Координата Z
+					new Color4f("#D4B870"), // Цвет текста
+					0.1f, // Поворот по X
+					0.1f, // Поворот по Y
+					0, // Поворот по Z
+					false, // Центрирование отключено
+					1.25f, // Размер обводки
+					new Color4f("#000000") // Цвет обводки
 			);
 		} else {
 			FontManager.getFont("FBUSV8C5EI").drawTextAlignedLeftOf(
-				Localization.get(starter.getLevel().levelName),// Текст для отрисовки
-				25,                                     // Размер текста
-				ScaleToScreen.getStretchedWidth(1275),  // Координата правого края
-				ScaleToScreen.getStretchedHeight(38),   // Координата Y
-				0,                                      // Координата Z
-				new Color4f("#D4B870"),                 // Цвет текста
-				0.1f,                                   // Поворот по X
-				0.1f,                                   // Поворот по Y
-				0,                                      // Поворот по Z
-				false,                                  // Центрирование отключено
-				1.25f,                                  // Размер обводки
-				new Color4f("#000000")                  // Цвет обводки
+					Localization.get(starter.getLevel().levelName), // Текст для отрисовки
+					25, // Размер текста
+					ScaleToScreen.getStretchedWidth(1275), // Координата правого края
+					ScaleToScreen.getStretchedHeight(38), // Координата Y
+					0, // Координата Z
+					new Color4f("#D4B870"), // Цвет текста
+					0.1f, // Поворот по X
+					0.1f, // Поворот по Y
+					0, // Поворот по Z
+					false, // Центрирование отключено
+					1.25f, // Размер обводки
+					new Color4f("#000000") // Цвет обводки
 			);
 		}
 		List<Entity> entities = WaveSystem.getEntities();
@@ -327,7 +329,7 @@ public class LevelScreen extends AbstractScreen {
 			FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(
 					"" + TimerUtils.getTimeScale() + "x", // Дополнительный текст
 					(int) ScaleToScreen.get(32),
-					ScaleToScreen.get(160) + 80, // Рисуем рядом с текстом зомби
+					ScaleToScreen.get(240), // Рисуем рядом с текстом зомби
 					ScaleToScreen.getTop(40),
 					0,
 					new Color4f("#FFFFFF"),
@@ -338,7 +340,7 @@ public class LevelScreen extends AbstractScreen {
 			FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(
 					"" + TimerUtils.getTimeScale() + "x", // Дополнительный текст
 					(int) ScaleToScreen.get(32),
-					ScaleToScreen.get(160) + 80, // Рисуем рядом с текстом зомби
+					ScaleToScreen.get(240), // Рисуем рядом с текстом зомби
 					ScaleToScreen.getTop(40),
 					0,
 					new Color4f("#FFFFFF"),
@@ -346,6 +348,32 @@ public class LevelScreen extends AbstractScreen {
 		}
 		GL11.glPopMatrix();
 
+		if (DebugManager.isDebugMode()) {
+			BigDecimal progressValue = new BigDecimal(starter.getLevel().waveSystem.getProgress());
+			progressValue = progressValue.multiply(new BigDecimal(100)); // Переводим в проценты
+			progressValue = progressValue.setScale(1, RoundingMode.DOWN); // Обрезаем до 2 знаков после запятой
+			String progressPercent = progressValue.toString() + "%"; // Добавляем знак процента
+
+			FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(
+					"" + progressPercent,
+					(int) ScaleToScreen.get(32),
+					ScaleToScreen.get(1945),
+					ScaleToScreen.getTop(40),
+					0,
+					new Color4f("#FF3200"),
+					0.1f, 0.1f, 0, true, 0.1f, 0.1f, new Color4f("#000000"));
+
+					FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(
+						"Волна: "
+								+ starter.getLevel().waveSystem.getCurrentWave() + "/"
+								+ starter.getLevel().waveSystem.getTotalWaves(),
+						(int) ScaleToScreen.get(32),
+						ScaleToScreen.get(1015),
+						ScaleToScreen.getTop(40),
+						0,
+						new Color4f("#FF3200"),
+						0.1f, 0.1f, 0, true, 0.1f, 0.1f, new Color4f("#000000"));
+		}
 	}
 
 	public void renderGrid(float x, float y, int rows, int cols) {

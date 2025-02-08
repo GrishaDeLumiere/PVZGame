@@ -9,8 +9,10 @@ import game.SettingsManager;
 import game.WindowManager;
 import game.entity.Animation;
 import game.entity.AnimationUtils;
+import game.font.Color4f;
 import game.gui.ScaleToScreen;
 import game.texture.TextureManager;
+import game.utils.DebugUtils;
 
 public class Sun {
 
@@ -113,7 +115,8 @@ public class Sun {
         }
         TextureManager.drawTexture(currentFrame, ScaleToScreen.getStretchedWidth(x), ScaleToScreen.getStretchedHeight(y), ScaleToScreen.getStretchedWidth(SUN_SIZE), ScaleToScreen.getStretchedHeight(SUN_SIZE), alpha);
         if (DebugManager.isDebugMode() && isMovingToCorner == false) {
-            renderCollision();
+            if (DebugManager.isCollisionDebugMode())
+            DebugUtils.addHitbox(x, y, hitboxWidth, hitboxHeight, 0, 0, new Color4f(0.0f, 1.0f, 0.0f, 1.0f));
         }
     }
 
@@ -148,23 +151,6 @@ public class Sun {
 
     public float getTimeAlive() {
         return timeAlive;
-    }
-    
-    public void renderCollision() {
-        GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glColor3f(0.0f, 1.0f, 0.0f);
-
-        GL11.glBegin(GL11.GL_LINE_LOOP);
-        GL11.glVertex2f(ScaleToScreen.getStretchedWidth(x + hitboxOffsetX), ScaleToScreen.getStretchedHeight(y + hitboxOffsetY)); 
-        GL11.glVertex2f(ScaleToScreen.getStretchedWidth(x + hitboxOffsetX + hitboxWidth), ScaleToScreen.getStretchedHeight(y + hitboxOffsetY)); 
-        GL11.glVertex2f(ScaleToScreen.getStretchedWidth(x + hitboxOffsetX + hitboxWidth), ScaleToScreen.getStretchedHeight(y + hitboxOffsetY + hitboxHeight)); 
-        GL11.glVertex2f(ScaleToScreen.getStretchedWidth(x + hitboxOffsetX), ScaleToScreen.getStretchedHeight(y + hitboxOffsetY + hitboxHeight));
-        GL11.glEnd();
-
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glColor3f(1.0f, 1.0f, 1.0f); 
-        GL11.glPopMatrix();
     }
     
 }

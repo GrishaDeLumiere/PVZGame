@@ -14,7 +14,7 @@ public class AlmanacScreen extends AbstractScreen {
 	private EntityZombie zombie;
 	
 	public AlmanacScreen() {
-		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.ogg");
 		
 		TextureManager.loadTexture("Almanac_IndexBack", "textures/Almanac/Almanac_IndexBack.png");
 		

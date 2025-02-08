@@ -104,7 +104,7 @@ public class OpenALManager {
         }
 
         LOGGER.info("Loaded sound effects: " + soundEffectManager.getSoundEffects().length);
-        musicManager.loadAndPlayBackgroundMusic("music/MainMenu.wav");
+        musicManager.loadAndPlayBackgroundMusic("music/MainMenu.ogg");
     }
 
 }

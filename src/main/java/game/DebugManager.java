@@ -3,29 +3,28 @@ package game;
 public class DebugManager {
 
     private static boolean debugMode = SettingsManager.isDebugMode();
+    private static boolean collisionMode = false;
 
-    // Включение или выключение режима
+    // Включение или выключение общего режима дебага
     public static void setDebugMode(boolean enabled) {
         debugMode = enabled;
         SettingsManager.setDebugMode(enabled);
     }
 
-    // Проверка, включён ли режим
+    // Проверка, включён ли общий режим дебага
     public static boolean isDebugMode() {
         return debugMode;
     }
 
-    // Логирование сообщений
-    public static void log(String message) {
-        if (debugMode) {
-            System.out.println("[DEBUG] " + message);
-        }
+    // Проверка, включён ли режим дебага коллизий
+    public static boolean isCollisionDebugMode() {
+        return collisionMode;
     }
 
-    // Логирование с объектом
-    public static void log(String tag, Object value) {
-        if (debugMode) {
-            System.out.println("[DEBUG] " + tag + ": " + value);
-        }
+    // Переключение режима коллизии
+    public static void toggleCollisionMode() {
+        collisionMode = !collisionMode; // Переключаем состояние коллизии
+
     }
+
 }

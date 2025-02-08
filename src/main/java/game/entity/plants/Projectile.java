@@ -64,6 +64,7 @@ public class Projectile {
                 ScaleToScreen.getStretchedHeight(y), ScaleToScreen.getStretchedWidth(40),
                 ScaleToScreen.getStretchedHeight(40));
         if (DebugManager.isDebugMode()) {
+            if (DebugManager.isCollisionDebugMode())
             DebugUtils.addHitbox(
                     x, y, hitboxWidth, hitboxHeight,
                     0, 0,

@@ -11,7 +11,7 @@ import game.texture.TextureManager;
 public class AlmanacScreenPlants extends AbstractScreen  {
 	
 	public AlmanacScreenPlants() {
-		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+		WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.ogg");
 		
 		TextureManager.loadTexture("Almanac_PlantBack", "textures/Almanac/plant.png");
 	}

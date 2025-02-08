@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
+import game.DebugManager;
 import game.Localization;
 import game.ThreadPoolManager;
 import game.WindowManager;
@@ -17,6 +18,8 @@ import game.font.FontManager;
 import game.gui.ScaleToScreen;
 import game.level.wave.EntitySpawner;
 import game.texture.TextureManager;
+import game.utils.DebugUtils;
+
 import java.awt.*;
 
 public class Starter {
@@ -36,10 +39,10 @@ public class Starter {
 
     public void init() {
         entities.clear();
-        WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.wav");
+        WindowManager.getAL().getMusicManager().loadAndPlayBackgroundMusic("music/SelectCard.ogg");
         TextureManager.loadTexture("background1", "textures/Level/background1.png");
         camera = new Camera(1920, 1080);
-        level = new Level("level.name.test", camera, "background1");
+        level = new Level("level.name.test", "music/Day.ogg", camera, "background1");
 
         ThreadPoolManager.getInstance().submitTask(() -> spawnInfoEntities(1));
         isCameraMovingRight = true;
@@ -230,6 +233,77 @@ public class Starter {
                     0.1f,
                     0.1f,
                     shadowColor);
+
+            GL11.glPopMatrix();
+
+        } else if (DebugManager.isDebugMode() && level.getStartGame() == false) {
+            GL11.glPushMatrix();
+            GL11.glLoadIdentity();
+            FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(
+                    "Уровень: " + level.levelName,
+                    (int) ScaleToScreen.getStretchedWidth(32),
+                    ScaleToScreen.getStretchedWidth(1200),
+                    ScaleToScreen.getStretchedHeight(930),
+                    0,
+                    new Color4f("#FFBC75"),
+                    0.1f, 0.1f, 0, false, 0.1f, 0.1f, new Color4f("#000000"));
+
+            FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(
+                    "Волны: " + level.waveSystem.getTotalWaves(),
+                    (int) ScaleToScreen.getStretchedWidth(32),
+                    ScaleToScreen.getStretchedWidth(1200),
+                    ScaleToScreen.getStretchedHeight(900),
+                    0,
+                    new Color4f("#FFBC75"),
+                    0.1f, 0.1f, 0, false, 0.1f, 0.1f, new Color4f("#000000"));
+
+            // Информация о уровне игры в режиме отладки.
+
+            Map<Class<? extends Entity>, Float> enemyTypes = level.waveSystem.getEnemyTypes();
+
+            float xPosition = ScaleToScreen.getStretchedWidth(1200); // Начальная позиция по X
+            float yPosition = ScaleToScreen.getStretchedHeight(870); // Начальная позиция по Y
+            float lineHeight = 30; // Высота строки
+
+            // Рисуем заголовок "Враги:"
+            FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(
+                    "Враги:", // Текст для вывода
+                    32, // Размер шрифта
+                    xPosition, // Позиция по X
+                    yPosition, // Позиция по Y
+                    0, // Позиция по Z
+                    new Color4f("#FFBC75"), // Цвет текста
+                    0, 0, 0, // Поворот текста по осям (если не нужен, оставляем 0)
+                    false, // Не по центру
+                    0.1f, 0.1f, // Сдвиг для тени
+                    new Color4f("#000000") // Цвет тени
+            );
+
+            // Сдвигаем позицию вниз после заголовка
+            yPosition -= lineHeight;
+
+            // Форматируем информацию о каждом типе врага
+            for (Map.Entry<Class<? extends Entity>, Float> entry : enemyTypes.entrySet()) {
+                String enemyType = entry.getKey().getSimpleName(); // Получаем имя класса (тип врага)
+                float spawnChance = entry.getValue(); // Шанс спавна
+
+                // Рисуем текст для каждого врага на новой строке с переносом по Y
+                FontManager.getFont("FBUSV8C5EI").drawTextWithShadow(
+                        " - " + enemyType + ": " + String.format("%.2f", spawnChance * 100) + "%", // Текст для вывода
+                        32, // Размер шрифта
+                        xPosition, // Позиция по X
+                        yPosition, // Позиция по Y
+                        0, // Позиция по Z
+                        new Color4f("#FFBC75"), // Цвет текста
+                        0, 0, 0, // Поворот текста по осям (если не нужен, оставляем 0)
+                        false, // Не по центру
+                        0.1f, 0.1f, // Сдвиг для тени
+                        new Color4f("#000000") // Цвет тени
+                );
+
+                yPosition -= lineHeight; // Сдвигаем вниз для следующего врага
+            }
+
             GL11.glPopMatrix();
         }
     }

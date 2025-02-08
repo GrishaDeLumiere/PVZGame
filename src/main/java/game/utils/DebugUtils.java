@@ -15,7 +15,7 @@ public class DebugUtils {
     
     private static int vaoID;
     private static int vboID;
-    private static final int MAX_HITBOXES = 1000; // Максимальное количество хитбоксов для батчинга
+    private static final int MAX_HITBOXES = 500; // Максимальное количество хитбоксов для батчинга
     private static FloatBuffer vertexBuffer;
     private static List<HitboxData> hitboxes = new ArrayList<>();
 

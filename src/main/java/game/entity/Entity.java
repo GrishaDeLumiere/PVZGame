@@ -81,10 +81,10 @@ public abstract class Entity {
 
         if (DebugManager.isDebugMode()) {
             // Добавляем хитбокс в список для отрисовки
+            if (DebugManager.isCollisionDebugMode())
             DebugUtils.addHitbox(x, y, hitboxWidth, hitboxHeight, 0, 0, new Color4f(1.0f, 0.0f, 0.0f, 1.0f));
 
-            DebugUtils.renderText(x, y, "ХП: " + hp, 40, 120, new Color4f("#ffa500"));
-            DebugUtils.renderText(x, y, "DM: " + damage, 37, 95, new Color4f("#ffa500"));
+            DebugUtils.renderText(x, y, "ХП: " + hp, 40, 120, new Color4f("#FF0010"));
         }
     }
 
