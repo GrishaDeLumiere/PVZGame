@@ -42,7 +42,7 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainClass = 'game.GameApp' // Укажите правильный главный класс
+    mainClass = 'game.GameApp'
     applicationDefaultJvmArgs = ['-Dfile.encoding=UTF-8']
 }
 
