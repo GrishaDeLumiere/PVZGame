@@ -48,7 +48,3 @@ git clone https://github.com/GrishaDeLumiere/PVZGame.git
 ## Автор
 
 * **GrishaDeLumiere** ([GitHub](https://github.com/GrishaDeLumiere))
-
-## Лицензия
-
-Проект распространяется под лицензией MIT (см. файл `LICENSE`).
